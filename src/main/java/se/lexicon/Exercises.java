@@ -7,6 +7,7 @@ import se.lexicon.model.Person;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Comparator;
+import java.util.List;
 
 public class Exercises {
 
@@ -17,7 +18,13 @@ public class Exercises {
     */
     public static void exercise1(String message) {
         System.out.println(message);
-        //Write your code here
+        // Use findMany() to get all persons with first name "Erik"
+        List<Person> eriks = storage.findMany(person -> person.getFirstName().equals("Erik"));
+
+        // Print each matching person
+        for (Person erik : eriks) {
+            System.out.println(erik);
+        }
 
         System.out.println("----------------------");
     }
@@ -26,7 +33,13 @@ public class Exercises {
         2.	TODO: Find all females in the collection using findMany().
      */
     public static void exercise2(String message) {
-        //Write your code here
+        System.out.println(message);
+        // Use findMany to filter all persons with gender FEMALE
+        List<Person> females = storage.findMany(person -> person.getGender().equals(Gender.FEMALE));
+
+        for (Person female : females) {
+            System.out.println(female);
+        }
 
         System.out.println("----------------------");
     }
@@ -36,7 +49,12 @@ public class Exercises {
      */
     public static void exercise3(String message) {
         System.out.println(message);
-        //Write your code here
+        LocalDate date = LocalDate.of(2000, 1, 1);
+        List<Person> bornAfter2000 = storage.findMany(person -> person.getBirthDate().isAfter(date) || person.getBirthDate().isEqual(date));
+
+        for (Person person : bornAfter2000) {
+            System.out.println(person);
+        }
 
         System.out.println("----------------------");
     }
@@ -46,7 +64,14 @@ public class Exercises {
      */
     public static void exercise4(String message) {
         System.out.println(message);
-        //Write your code here
+        Person person = storage.findOne(p -> p.getId() == 123);
+        if (person != null) {
+            System.out.println(person);
+        } else {
+            System.out.println("No person found with id 123");
+
+        }
+
 
         System.out.println("----------------------");
     }
@@ -57,7 +82,16 @@ public class Exercises {
      */
     public static void exercise5(String message) {
         System.out.println(message);
-        //Write your code here
+        String result = storage.findOneAndMapToString(p -> p.getId() == 456,
+                p -> "Name: " + p.getFirstName() + " " + p.getLastName() + " born " + p.getBirthDate()
+        );
+        if (result != null) {
+            System.out.println(result);
+        } else {
+            System.out.println("No person found with id 456");
+
+        }
+
 
         System.out.println("----------------------");
     }
