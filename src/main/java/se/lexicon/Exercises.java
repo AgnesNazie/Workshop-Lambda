@@ -102,6 +102,13 @@ public class Exercises {
     public static void exercise6(String message) {
         System.out.println(message);
         //Write your code here
+        List<String> males = storage.findManyAndMapEachToString(person -> person.getGender().equals(Gender.MALE) && person.getFirstName().startsWith("E"),
+                person -> "Name: " + person.getFirstName() + " " + person.getLastName() + " born " + person.getBirthDate()
+        );
+
+        for (String male : males) {
+            System.out.println(male);
+        }
 
         System.out.println("----------------------");
     }
@@ -112,8 +119,18 @@ public class Exercises {
      */
     public static void exercise7(String message) {
         System.out.println(message);
-        //Write your code here
+        LocalDate today = LocalDate.now();
+        List<String> belowAge10 = storage.findManyAndMapEachToString(
+                person -> {
+                    // Calculate age by comparing birthdate with today's date
+                    int age = Period.between(person.getBirthDate(), today).getYears();
+                    return age < 10; // Filter people who are below the age of 10
+                },
+                person -> "Name: " + person.getFirstName() + " " + person.getLastName() + " born " + person.getBirthDate());
 
+        for (String person : belowAge10) {
+            System.out.println(person);
+        }
         System.out.println("----------------------");
     }
 
@@ -122,7 +139,11 @@ public class Exercises {
      */
     public static void exercise8(String message) {
         System.out.println(message);
-        //Write your code here
+        // Use findAndDo() to get all persons with first name "Ulf"
+        storage.findAndDo
+                (person -> person.getFirstName().equals("Ulf"),
+                        person -> System.out.println("Name: " + person.getFirstName() + " " + person.getLastName()));
+
 
         System.out.println("----------------------");
     }
@@ -132,7 +153,9 @@ public class Exercises {
      */
     public static void exercise9(String message) {
         System.out.println(message);
-        //Write your code here
+        storage.findAndDo
+                (person -> person.getLastName().contains(person.getFirstName()),
+                        person -> System.out.println("Name: " + person.getFirstName() + " " + person.getLastName()));
 
         System.out.println("----------------------");
     }
@@ -152,7 +175,14 @@ public class Exercises {
      */
     public static void exercise11(String message) {
         System.out.println(message);
-        //Write your code here
+        List<Person> firstNameStartWithA = storage.findAndSort
+                (person -> person.getFirstName().startsWith("A"), //filter by firstname start with "A"
+                        Comparator.comparing(Person::getBirthDate)         // SORT: by birth date
+                );
+        for (Person person : firstNameStartWithA) {
+            System.out.println("Name: " + person.getFirstName() + " " + person.getLastName()
+                    + ", Birthdate: " + person.getBirthDate());
+        }
 
         System.out.println("----------------------");
     }
@@ -162,7 +192,15 @@ public class Exercises {
      */
     public static void exercise12(String message) {
         System.out.println(message);
-        //Write your code here
+        List<Person> bornBefore1950 = storage.findAndSort
+                (person -> person.getBirthDate().isBefore(LocalDate.of(1950, 1, 1)),
+                        Comparator.comparing(Person::getBirthDate).reversed()
+                );
+        for (Person person : bornBefore1950) {
+            System.out.println("Name: " + person.getFirstName() + " " + person.getLastName()
+                    + ", Birthdate: " + person.getBirthDate());
+        }
+
 
         System.out.println("----------------------");
     }
@@ -172,9 +210,19 @@ public class Exercises {
      */
     public static void exercise13(String message) {
         System.out.println(message);
-        //Write your code here
+        List<Person> nameOrder = storage.findAndSort
+                (person -> true,
+                        Comparator.comparing(Person::getLastName)
+                                .thenComparing(Person::getFirstName)
+                                .thenComparing(Person::getBirthDate)
+                );
+        for (Person person : nameOrder) {
+            System.out.println("Name: " + person.getFirstName() + " " + person.getLastName()
+                    + ", Birthdate: " + person.getBirthDate());
+        }
 
         System.out.println("----------------------");
     }
 
 }
+
